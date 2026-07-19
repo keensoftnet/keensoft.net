@@ -253,8 +253,10 @@
  
   .product-cta {
     display: inline-block; margin-top: 1.5rem;
+    font-family: inherit;
     font-size: 0.875rem; font-weight: 600;
     padding: 0.6rem 1.25rem; border-radius: 8px;
+    border: none; cursor: pointer;
     text-decoration: none; transition: all 0.2s;
   }
   .product-cta.primary {
@@ -266,7 +268,12 @@
     border: 1.5px solid var(--border);
   }
   .product-cta.outline:hover { border-color: var(--teal); color: var(--teal); }
- 
+  .product-cta-row {
+    display: flex; flex-wrap: wrap; gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .product-cta-row .product-cta { margin-top: 0; }
+
   /* ── APPROACH ── */
   .approach {
     padding: 6rem 2rem;
@@ -332,6 +339,81 @@
     font-size: 0.8rem; color: var(--muted);
   }
  
+  /* ── SCREENSHOT MODAL ── */
+  .screenshot-modal {
+    position: fixed; inset: 0; z-index: 200;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  .screenshot-modal.open { display: flex; }
+  .screenshot-modal-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease both;
+  }
+  .screenshot-modal-dialog {
+    position: relative;
+    width: min(90vw, 1000px);
+    max-height: 90vh;
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 80px rgba(15, 23, 42, 0.35);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    animation: modalPop 0.25s ease both;
+  }
+  .screenshot-modal-close {
+    position: absolute; top: 1rem; right: 1rem; z-index: 2;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); border: 1px solid var(--border);
+    font-size: 1.25rem; line-height: 1; color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .screenshot-modal-close:hover { border-color: var(--teal); color: var(--teal); }
+  .screenshot-modal-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); border: 1px solid var(--border);
+    font-size: 1.5rem; color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .screenshot-modal-nav:hover { border-color: var(--teal); color: var(--teal); }
+  .screenshot-modal-nav.prev { left: 1rem; }
+  .screenshot-modal-nav.next { right: 1rem; }
+  .screenshot-modal-image-wrap {
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem;
+  }
+  .screenshot-modal-image-wrap img {
+    max-width: 100%; max-height: 65vh;
+    border-radius: 8px;
+    display: block;
+  }
+  .screenshot-modal-info {
+    padding: 1.5rem 2rem;
+    overflow-y: auto;
+  }
+  .screenshot-modal-counter {
+    font-size: 0.75rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--teal); margin-bottom: 0.5rem;
+  }
+  .screenshot-modal-info h3 {
+    font-family: var(--serif);
+    font-size: 1.5rem; font-weight: 400;
+    color: var(--ink); margin-bottom: 0.5rem;
+  }
+  .screenshot-modal-info p {
+    font-size: 0.95rem; line-height: 1.7;
+    color: var(--slate);
+  }
+
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
@@ -341,7 +423,15 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
   }
- 
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes modalPop {
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     .nav-links a:not(.nav-cta) { display: none; }
@@ -361,6 +451,14 @@
     .hero h1 { font-size: clamp(2.2rem, 8vw, 3.5rem); }
     .hero-sub { font-size: 1.05rem; }
     .philosophy h2, .products h2, .approach h2 { font-size: 1.75rem; }
+    .screenshot-modal { padding: 0; }
+    .screenshot-modal-dialog { width: 100vw; height: 100%; max-height: 100vh; border-radius: 0; }
+    .screenshot-modal-image-wrap { padding: 1rem; }
+    .screenshot-modal-image-wrap img { max-height: 40vh; }
+    .screenshot-modal-nav { width: 38px; height: 38px; font-size: 1.25rem; }
+    .screenshot-modal-nav.prev { left: 0.5rem; }
+    .screenshot-modal-nav.next { right: 0.5rem; }
+    .screenshot-modal-info { padding: 1.25rem 1.5rem; }
   }
 </style>
 </head>
@@ -398,7 +496,7 @@
     </p>
     <div class="stats-row">
       <div class="stat">
-        <h3>3</h3>
+        <h3>2</h3>
         <p>Specialized products</p>
       </div>
       <div class="stat">
@@ -416,7 +514,7 @@
 <!-- PRODUCTS -->
 <section class="products" id="products">
   <div class="container">
-    <h2>What we build</h2>
+    <h2>Client Projects</h2>
     <div class="product-grid">
  
       <div class="product-card">
@@ -433,18 +531,6 @@
         <a href="https://demo.bom-tracker.com/dashboard" target="_blank" class="product-cta primary">Try Live Demo →</a>
       </div>
  
-      <div class="product-card coming-soon">
-        <div class="product-icon">DA</div>
-        <h3>DiscoveryAI <span class="coming-soon-badge">Coming Soon</span></h3>
-        <div class="tagline">Legal Technology</div>
-        <p>AI-powered tools for legal professionals. Streamline discovery workflows, reduce manual review time, and surface critical information faster across large document sets. Launching summer 2026.</p>
-        <div class="product-features">
-          <span class="feature-tag">Legal Discovery</span>
-          <span class="feature-tag">Document Analysis</span>
-          <span class="feature-tag">AI-Powered</span>
-        </div>
-      </div>
- 
       <div class="product-card">
         <div class="product-icon">PM</div>
         <h3>Paver Management <span class="live-badge">In Production</span></h3>
@@ -455,9 +541,12 @@
           <span class="feature-tag">Field Operations</span>
           <span class="feature-tag">Multi-Tenancy Planned</span>
         </div>
-        <a href="https://www.linkedin.com/company/keensoftnet" target="_blank" class="product-cta outline">Request Demo →</a>
+        <div class="product-cta-row">
+          <a href="https://www.linkedin.com/company/keensoftnet" target="_blank" class="product-cta outline">Request Demo →</a>
+          <button type="button" class="product-cta outline" onclick="openScreenshotModal()">Screenshots</button>
+        </div>
       </div>
- 
+
     </div>
   </div>
 </section>
@@ -496,7 +585,6 @@
         <h5>Products</h5>
         <a href="#">PartsAgent</a>
         <a href="#">Paver Management</a>
-        <a href="#">DiscoveryAI</a>
       </div>
       <div class="footer-col">
         <h5>Company</h5>
@@ -515,6 +603,80 @@
     </div>
   </div>
 </footer>
- 
+
+<!-- SCREENSHOT MODAL -->
+<div class="screenshot-modal" id="screenshotModal">
+  <div class="screenshot-modal-backdrop" onclick="closeScreenshotModal()"></div>
+  <div class="screenshot-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="screenshotModalTitle">
+    <button type="button" class="screenshot-modal-close" onclick="closeScreenshotModal()" aria-label="Close">&times;</button>
+    <button type="button" class="screenshot-modal-nav prev" onclick="navigateScreenshot(-1)" aria-label="Previous screenshot">&#8249;</button>
+    <button type="button" class="screenshot-modal-nav next" onclick="navigateScreenshot(1)" aria-label="Next screenshot">&#8250;</button>
+    <div class="screenshot-modal-image-wrap">
+      <img id="screenshotModalImage" src="" alt="">
+    </div>
+    <div class="screenshot-modal-info">
+      <div class="screenshot-modal-counter" id="screenshotModalCounter"></div>
+      <h3 id="screenshotModalTitle"></h3>
+      <p id="screenshotModalDescription"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  var paverScreenshots = [
+    {
+      src: "assets/screenshots/paver-new-orders.png",
+      title: "Paver Management – New Orders List with Project Files Panel",
+      description: "Dashboard view of Aggie Inc.'s Paver Management tool, filtered to \"New Orders\" (285 projects). The right panel shows details for Ladera Trails Encore, lot #76, including its Files tab with an uploaded PO PDF."
+    },
+    {
+      src: "assets/screenshots/paver-calendar.png",
+      title: "Paver Management – July 2026 Calendar (Work Orders)",
+      description: "Monthly calendar view of Paver Management filtered to the \"WorkOrder\" stage (59 projects), showing installer and other scheduled entries across each day of July 2026."
+    },
+    {
+      src: "assets/screenshots/paver-job-complete.png",
+      title: "Paver Management – Job Complete List with New Project Order Form",
+      description: "Dashboard filtered to \"Job Complete\" (323 projects) with the \"New Project Order\" creation form open on the right, showing required fields for Builder, Community, Lot Number, and Address."
+    }
+  ];
+  var screenshotIndex = 0;
+
+  function openScreenshotModal() {
+    screenshotIndex = 0;
+    renderScreenshot();
+    document.getElementById('screenshotModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleScreenshotKeydown);
+  }
+
+  function closeScreenshotModal() {
+    document.getElementById('screenshotModal').classList.remove('open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', handleScreenshotKeydown);
+  }
+
+  function navigateScreenshot(delta) {
+    var count = paverScreenshots.length;
+    screenshotIndex = (screenshotIndex + delta + count) % count;
+    renderScreenshot();
+  }
+
+  function renderScreenshot() {
+    var item = paverScreenshots[screenshotIndex];
+    document.getElementById('screenshotModalImage').src = item.src;
+    document.getElementById('screenshotModalImage').alt = item.title;
+    document.getElementById('screenshotModalTitle').textContent = item.title;
+    document.getElementById('screenshotModalDescription').textContent = item.description;
+    document.getElementById('screenshotModalCounter').textContent = (screenshotIndex + 1) + ' / ' + paverScreenshots.length;
+  }
+
+  function handleScreenshotKeydown(e) {
+    if (e.key === 'Escape') closeScreenshotModal();
+    if (e.key === 'ArrowLeft') navigateScreenshot(-1);
+    if (e.key === 'ArrowRight') navigateScreenshot(1);
+  }
+</script>
+
 </body>
 </html>
